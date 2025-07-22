@@ -1,6 +1,7 @@
 package io.github.vivianagh.flightapp.model;
 
 
+import io.github.vivianagh.avro.Flight;
 import lombok.*;
 
 @Getter
@@ -99,5 +100,26 @@ public class FlightData {
         if (loggedTime != null) sb.append(", loggedTime=").append(loggedTime);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static FlightData fromAvro(Flight flightAvro) {
+        FlightData flightData = new FlightData();
+        flightData.setIcao24(flightAvro.getIcao24() != null ? flightAvro.getIcao24().toString() : null);
+        flightData.setCallsign(flightAvro.getCallsign() != null ? flightAvro.getCallsign().toString() : null);
+        flightData.setAltitude(flightAvro.getAltitude());
+        flightData.setLatitude(flightAvro.getLatitude());
+        flightData.setLongitude(flightAvro.getLongitude());
+        flightData.setGroundSpeed(flightAvro.getGroundSpeed());
+        flightData.setSquawk(flightAvro.getSquawk() != null ? flightAvro.getSquawk().toString() : null);
+        flightData.setAlert(flightAvro.getAlert());
+        flightData.setEmergency(flightAvro.getEmergency());
+        flightData.setSpi(flightAvro.getSpi());
+        flightData.setOnGround(flightAvro.getIsOnGround());
+        flightData.setGeneratedDate(flightAvro.getGeneratedDate() != null ? flightAvro.getGeneratedDate().toString() : null);
+        flightData.setGeneratedTime(flightAvro.getGeneratedTime() != null ? flightAvro.getGeneratedTime().toString() : null);
+        flightData.setLoggedDate(flightAvro.getLoggedDate() != null ? flightAvro.getLoggedDate().toString() : null);
+        flightData.setLoggedTime(flightAvro.getLoggedTime() != null ? flightAvro.getLoggedTime().toString() : null);
+        flightData.setTransmissionType(flightAvro.getTransmissionType() != null ? flightAvro.getTransmissionType().toString() : null);
+        return flightData;
     }
 }

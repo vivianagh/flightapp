@@ -1,13 +1,29 @@
 spring:
   application:
-    name: flight-producer
+    name: flight-app
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/flights_db
+    username: postgres
+    password: postgres
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
   kafka:
     bootstrap-servers: localhost:29092
     properties:
       schema.registry.url: http://localhost:8081
+      specific.avro.reader: true
     producer:
-      key-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
 
 kafka:
   topic:
@@ -17,3 +33,7 @@ flight:
   socket:
     host: 192.168.8.236
     port: 30003
+
+
+
+
