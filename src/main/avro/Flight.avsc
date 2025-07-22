@@ -1,0 +1,25 @@
+{
+  "type": "record",
+  "name": "Flight",
+  "namespace": "io.github.vivianagh.avro",
+  "fields": [
+    { "name": "icao24", "type": "string" },
+    { "name": "transmissionType", "type": ["null", "string"], "default": null },
+    { "name": "callsign", "type": ["null", "string"], "default": null },
+    { "name": "altitude", "type": ["null", "double"], "default": null },
+    { "name": "latitude", "type": ["null", "double"], "default": null },
+    { "name": "longitude", "type": ["null", "double"], "default": null },
+    { "name": "groundSpeed", "type": ["null", "double"], "default": null },
+    { "name": "track", "type": ["null", "double"], "default": null },
+    { "name": "squawk", "type": ["null", "string"], "default": null },
+    { "name": "alert", "type": "boolean", "default": false },
+    { "name": "emergency", "type": "boolean", "default": false },
+    { "name": "spi", "type": "boolean", "default": false },
+    { "name": "isOnGround", "type": "boolean", "default": false },
+    { "name": "generatedDate", "type": ["null", "string"], "default": null },
+    { "name": "generatedTime", "type": ["null", "string"], "default": null },
+    { "name": "loggedDate", "type": ["null", "string"], "default": null },
+    { "name": "loggedTime", "type": ["null", "string"], "default": null }
+  ]
+}
+
