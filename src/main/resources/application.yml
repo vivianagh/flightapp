@@ -11,6 +11,9 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        format_sql:true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   kafka:
@@ -21,13 +24,22 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://localhost:8081
     consumer:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        schema.registry.url: http://localhost:8081
+        specific.avro.reader: true
 
 kafka:
   topic:
-    flight: flights
+    rawFlights: raw-flights
+    completedFlights: flights-completed
+    flightsOverHome: flights-over-home
+    flightsUpdate: flights-update
+    deadLetter: flights-dlq
 
 flight:
   socket:

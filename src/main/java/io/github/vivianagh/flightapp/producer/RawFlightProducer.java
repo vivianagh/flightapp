@@ -9,14 +9,14 @@ import io.github.vivianagh.avro.Flight;
 
 @Service
 @RequiredArgsConstructor
-public class FlightProducerService {
+public class RawFlightProducer {
 
     private final KafkaTemplate<String,Flight> kafkaTemplate;
 
-    @Value("${kafka.topic.flight}")
+    @Value("${kafka.topic.rawFlights}")
     private String flightTopic;
 
-    public void sendFlightData(FlightData data) {
+    public void sendRawFlight(FlightData data) {
         Flight flightAvro = Flight.newBuilder()
                 .setIcao24(data.getIcao24())
                 .setCallsign(data.getCallsign())

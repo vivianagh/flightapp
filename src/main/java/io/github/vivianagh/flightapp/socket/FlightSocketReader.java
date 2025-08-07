@@ -1,7 +1,7 @@
 package io.github.vivianagh.flightapp.socket;
 
 import io.github.vivianagh.flightapp.model.FlightData;
-import io.github.vivianagh.flightapp.producer.FlightProducerService;
+import io.github.vivianagh.flightapp.producer.RawFlightProducer;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +19,7 @@ public class FlightSocketReader implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(FlightSocketReader.class);
 
-    private final FlightProducerService producerService;
+    private final RawFlightProducer producer;
 
     @Value("${flight.socket.host}")
     private String host;
@@ -39,8 +39,8 @@ public class FlightSocketReader implements CommandLineRunner {
                 if (line.startsWith("MSG")) {
                     FlightData flightData = FlightData.fromCsvLine(line);
                     if (flightData.getIcao24() != null) {
-                        producerService.sendFlightData(flightData);
-                        log.info("Sent to Kafka: {}", flightData.toString());
+                        producer.sendRawFlight(flightData);
+                        log.info("Sent raw flight to Kafka: {}", flightData.toString());
                     }
                 }
             }

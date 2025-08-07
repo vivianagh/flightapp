@@ -1,4 +1,4 @@
-package io.github.vivianagh.flightapp.model;
+package io.github.vivianagh.flightapp.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
