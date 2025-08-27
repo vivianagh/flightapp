@@ -15,6 +15,15 @@ spring:
       hibernate:
         format_sql:true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true   # útil si tu schema ya tiene tablas previas
+    default-schema: public      # explícito por si el search_path no apunta a public
+    schemas: public
+  logging:
+    level:
+      org.flywaydb: INFO
 
   kafka:
     bootstrap-servers: localhost:29092
@@ -46,6 +55,15 @@ flight:
     host: 192.168.8.236
     port: 30003
 
+external:
+  aerodatabox:
+    baseUrl: https://aerodatabox.p.rapidapi.com
+    apiKey: ${AERODATABOX_API_KEY:}
+    host: aerodatabox.p.rapidapi.com
 
+logging:
+  level:
+    com.flight-app: DEBUG
+    org.springframework.web.client.RestClient: INFO
 
 

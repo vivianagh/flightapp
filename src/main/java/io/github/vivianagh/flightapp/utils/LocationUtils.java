@@ -4,7 +4,7 @@ public class LocationUtils {
 
     private static final double HOME_LAT = 51.4757;
     private static final double HOME_LON = 0.3252;
-    private static final double RADIUS_KM = 10.0;
+    private static final double RADIUS_KM = 20.0;
 
     public static boolean isNearHome(double lat, double lon) {
         double earthRadius = 6371.0;

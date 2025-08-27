@@ -18,7 +18,7 @@ public class LogHelper {
     }
 
     public static void logSkipped(String reason, String key) {
-        log.warn("⏭ Skipped message - reason: {} - key: {}", reason, key);
+        log.debug("⏭ Skipped message - reason: {} - key: {}", reason, key);
     }
 
     public static void logError(String context, Exception e) {

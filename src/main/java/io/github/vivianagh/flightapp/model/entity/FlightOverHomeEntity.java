@@ -19,9 +19,13 @@ public class FlightOverHomeEntity {
 
     private String icao24;
     private String callsign;
+
+    private String airline;
     private Double latitude;
     private Double longitude;
     private Double altitude;
+
+    private Double speed;
 
     private String loggedDate;
     private String loggedTime;

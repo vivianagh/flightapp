@@ -20,11 +20,11 @@ public class FlightsPerHourController {
     @GetMapping("/flights-per-hour")
     public ResponseEntity<List<ChartDataDTO>> getFlightsPerHour(@RequestParam String date) {
         try {
+            // Espera "yyyy-MM-dd" (tu front ya lo formatea así)
             LocalDate parsedDate = LocalDate.parse(date);
-            List<ChartDataDTO> results = service.getFlightsPerHourForDate(parsedDate);
-            return ResponseEntity.ok(results);
+            return ResponseEntity.ok(service.getFlightsPerHourForDate(parsedDate));
         } catch (DateTimeParseException e) {
-            return ResponseEntity.badRequest().build(); // 400 si el formato es inválido
+            return ResponseEntity.badRequest().build();
         }
     }
 }

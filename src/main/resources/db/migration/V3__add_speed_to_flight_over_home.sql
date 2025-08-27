@@ -1,0 +1,8 @@
+ALTER TABLE flight_over_home
+    ADD COLUMN IF NOT EXISTS speed DOUBLE PRECISION;
+
+ALTER TABLE flight_over_home
+    ADD COLUMN IF NOT EXISTS airline VARCHAR(64);
+
+ALTER TABLE flight_over_home
+    ADD COLUMN IF NOT EXISTS speed DOUBLE PRECISION;

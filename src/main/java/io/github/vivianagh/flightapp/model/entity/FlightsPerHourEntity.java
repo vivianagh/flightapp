@@ -1,26 +1,18 @@
 package io.github.vivianagh.flightapp.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDate;
 
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
 @Entity
-@Table(name ="flights_per_hour")
-@IdClass(FlightsPerHourId.class)
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Table(name = "flights_per_hour")
 public class FlightsPerHourEntity {
-    @Id
-    private LocalDate date;
 
-    @Id
-    private int hour;
+    @EmbeddedId
+    private FlightsPerHourId id;
 
-    private int count;
+    @Column(name = "count", nullable = false)
+    private Integer count;
 }
