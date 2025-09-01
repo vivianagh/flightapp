@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class FlightOverHomeController {
 
     private final FlightOverHomeService service;
 
-    @GetMapping("flights-over-home")
+    @GetMapping("/flights-over-home")
     public List<FlightOverHomeDTO> getRecentFlights() {
         return service.getAllFlightsOverHome();
     }

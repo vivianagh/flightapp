@@ -24,6 +24,7 @@ spring:
   logging:
     level:
       org.flywaydb: INFO
+      i.g.v.flightapp.services.RouteResolverServiceImpl: DEBUG
 
   kafka:
     bootstrap-servers: localhost:29092
@@ -50,11 +51,6 @@ kafka:
     flightsUpdate: flights-update
     deadLetter: flights-dlq
 
-flight:
-  socket:
-    host: 192.168.8.236
-    port: 30003
-
 external:
   aerodatabox:
     baseUrl: https://aerodatabox.p.rapidapi.com
@@ -65,5 +61,11 @@ logging:
   level:
     com.flight-app: DEBUG
     org.springframework.web.client.RestClient: INFO
+
+routes:
+  batch-size: 10         # antes era 150
+  sleep-ms: 1200         # pausa entre requests (1.2s)
+  cooldown-seconds: 3600 # si no viene Retry-After, entrar en cooldown 1h
+
 
 

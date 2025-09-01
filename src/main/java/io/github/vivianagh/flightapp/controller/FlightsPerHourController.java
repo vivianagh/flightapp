@@ -11,7 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class FlightsPerHourController {
 

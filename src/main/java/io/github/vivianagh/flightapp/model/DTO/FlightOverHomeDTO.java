@@ -6,6 +6,7 @@ import lombok.Data;
 @Builder
 @Data
 public class FlightOverHomeDTO {
+    private String icao24;
     private String callsign;
     private String airline;
     private String origin;

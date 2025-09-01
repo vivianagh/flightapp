@@ -29,4 +29,7 @@ public class FlightOverHomeEntity {
 
     private String loggedDate;
     private String loggedTime;
+
+    private String origin;
+    private String destination;
 }

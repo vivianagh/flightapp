@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,54 +41,83 @@ public class FlightOverHomeService {
             entry("JBU","B6"), entry("AMX","AM"), entry("LAN","LA"), entry("AVA","AV"),
             entry("EWG","EW"),  // Eurowings: EWG45Z -> EW45
             entry("HVN","VN"),  // Vietnam Airlines: HVN51 -> VN51
-            entry("BBC","BG")
+            entry("BBC","BG"),
+            entry("CLX","CV"),  // Cargolux
+            entry("DHK","QY"),  // DHL Air UK
+            entry("GTI","5Y"),  // Atlas Air
+            entry("BTI","BT"),  // Air Baltic
+            entry("BOO","B0")
     );
 
     public List<FlightOverHomeDTO> getAllFlightsOverHome() {
-        List<FlightOverHomeEntity> flights = repository.findTop20ByOrderByLoggedDateDesc();
-        if (flights.isEmpty()) {
-            throw new ResourceNotFoundException("No se encontraron vuelos sobre casa.");
+        // Trae 40 “completables” más recientes y después mapeá a 20
+        var rows = repository.findLatestCompleteLike(40);
+        if (rows.isEmpty()) {
+            // fallback a puro “últimos” si no hay suficientes completables
+            rows = repository.findLatest(40);
+            if (rows.isEmpty()) {
+                throw new ResourceNotFoundException("No se encontraron vuelos sobre casa.");
+            }
         }
 
-        return flights.stream().map(e -> {
-            String callsign = trimOrNull(e.getCallsign());
-            String icao24   = trimOrNull(e.getIcao24());
+        // Mapear/enriquecer y quedarte con los primeros 20
+        return rows.stream()
+                .map(this::mapAndEnrich)
+                .sorted(Comparator.comparing(FlightOverHomeDTO::getTimestamp).reversed())
+                .limit(20)
+                .toList();
+    }
 
-            // 1) Aerolínea por callsign (fallback a "Unknown")
-            String airline = Optional.ofNullable(lookupService.getAirlineName(callsign, icao24))
-                    .filter(s -> !s.isBlank()).orElse("Unknown");
+    private FlightOverHomeDTO mapAndEnrich(FlightOverHomeEntity e) {
+        String callsign = trimOrNull(e.getCallsign());
+        String icao24   = trimOrNull(e.getIcao24());
 
-            // 2) Enriquecer con origin/destination desde la cache persistente (sin API)
-            String origin = null, destination = null;
+        // 1) Aerolínea amigable
+        String airline = Optional.ofNullable(lookupService.getAirlineName(callsign, icao24))
+                .filter(s -> !s.isBlank()).orElse("Unknown");
 
-            // 2.a) Si tengo callsign -> normalizo a flightNumber y busco por PK
+        // 2) Origen/destino: primero lo que ya tenga la fila
+        String origin = e.getOrigin();
+        String destination = e.getDestination();
+
+        // 3) Si aún no hay, consulto cache persistente (sin pegarle a la API)
+        if (origin == null && destination == null) {
+            // 3.a) por flightNumber (callsign normalizado)
             String flightNumber = normalizeFlightNumber(callsign);
             if (flightNumber != null) {
                 var rc = routeCacheRepo.findById(flightNumber).orElse(null);
-                if (rc != null) { origin = rc.getOrigin(); destination = rc.getDestination(); }
+                if (rc != null) {
+                    origin = rc.getOrigin();
+                    destination = rc.getDestination();
+                }
             }
 
-            // 2.b) Si aún vacío y tengo icao24 -> busco por la última ruta conocida de esa aeronave
+            // 3.b) por icao24 (último registro)
             if (origin == null && destination == null && icao24 != null) {
                 var rc2 = routeCacheRepo.findFirstByIcao24OrderByUpdatedAtDesc(icao24.toUpperCase()).orElse(null);
-                if (rc2 != null) { origin = rc2.getOrigin(); destination = rc2.getDestination(); }
+                if (rc2 != null) {
+                    origin = rc2.getOrigin();
+                    destination = rc2.getDestination();
+                }
             }
+        }
 
-            return FlightOverHomeDTO.builder()
-                    .callsign(callsign)
-                    .airline(airline)
-                    .origin(origin)                   // ⬅️ ahora viene desde cache si existe
-                    .destination(destination)         // ⬅️ idem
-                    .altitude(e.getAltitude() != null ? e.getAltitude() : null)
-                    .speed(null)
-                    .latitude(e.getLatitude())
-                    .longitude(e.getLongitude())
-                    .hasAlert(false)
-                    .hasEmergency(false)
-                    .timestamp(toIsoTimestamp(e))     // ISO-8601 (UTC)
-                    .build();
-        }).toList();
+        return FlightOverHomeDTO.builder()
+                .icao24(icao24)
+                .callsign(callsign)
+                .airline(airline)
+                .origin(origin)
+                .destination(destination)
+                .altitude(e.getAltitude())
+                .speed(e.getSpeed())          // o null si tu entity no lo tiene
+                .latitude(e.getLatitude())
+                .longitude(e.getLongitude())
+                .hasAlert(false)
+                .hasEmergency(false)
+                .timestamp(toIsoTimestamp(e))
+                .build();
     }
+
 
     // ---------- Helpers ----------
 

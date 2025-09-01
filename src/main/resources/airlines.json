@@ -1,0 +1,18 @@
+[
+  {"icao":"BAW","iata":"BA","name":"British Airways","country":"United Kingdom"},
+  {"icao":"EZY","iata":"U2","name":"easyJet","country":"United Kingdom"},
+  {"icao":"EJU","iata":"EC","name":"easyJet Europe","country":"Austria"},
+  {"icao":"DLH","iata":"LH","name":"Lufthansa","country":"Germany"},
+  {"icao":"SAS","iata":"SK","name":"Scandinavian Airlines","country":"Sweden"},
+  {"icao":"TOM","iata":"BY","name":"TUI Airways","country":"United Kingdom"},
+  {"icao":"RYR","iata":"FR","name":"Ryanair","country":"Ireland"},
+  {"icao":"AFR","iata":"AF","name":"Air France","country":"France"},
+  {"icao":"KLM","iata":"KL","name":"KLM Royal Dutch","country":"Netherlands"},
+  {"icao":"SVA","iata":"SV","name":"Saudia","country":"Saudi Arabia"},
+  {"icao":"AAL","iata":"AA","name":"American Airlines","country":"United States"},
+  {"icao":"UAL","iata":"UA","name":"United Airlines","country":"United States"},
+  {"icao":"DAL","iata":"DL","name":"Delta Air Lines","country":"United States"},
+  {"icao":"ACA","iata":"AC","name":"Air Canada","country":"Canada"},
+  {"icao":"AMX","iata":"AM","name":"Aeroméxico","country":"Mexico"},
+  {"icao":"LAN","iata":"LA","name":"LATAM Airlines","country":"Chile"}
+]

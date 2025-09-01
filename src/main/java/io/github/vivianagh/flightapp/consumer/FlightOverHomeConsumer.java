@@ -58,14 +58,28 @@ public class FlightOverHomeConsumer {
 
             // ---- 3) Upsert row (update only missing fields) ----
             FlightOverHomeEntity saved = upsertRow(d, icao24, callsign);
+            Instant when = toInstant(loggedDate, loggedTime);
+            var route = routeResolver.resolve(callsign, icao24, when);
+            if (route != null && (route.origin() != null || route.destination() != null)) {
+                // usar exactamente los strings que guardaste al insertar
+                int n = repository.updateRouteForSample(
+                        icao24,
+                        d.getLoggedDate(),      // ej: "2025/08/31" si así lo guardaste
+                        d.getLoggedTime(),      // ej: "16:33:57.544" (con o sin .SSS según tu columna)
+                        route.origin(),
+                        route.destination()
+                );
+                log.info("🏷️ route set {} -> {} for {} (rows updated = {})",
+                        route.origin(), route.destination(), icao24, n);
+            }
 
             LogHelper.logSavedToDb("flight_over_home", icao24);
 
             // ---- 4) Increment per-hour counter (idempotent in service layer) ----
-            Instant when = toInstant(loggedDate, loggedTime);
+
             LocalDate londonDate = LocalDateTime.ofInstant(when, ZoneId.of("Europe/London")).toLocalDate();
             int londonHour = LocalDateTime.ofInstant(when, ZoneId.of("Europe/London")).getHour();
-            perHourService.incrementCount(londonDate, londonHour, icao24);
+            //perHourService.incrementCount(londonDate, londonHour, icao24);
 
             // ---- 5) Resolve route (non-blocking cache warmup) if we have callsign ----
             if (callsign != null) {
