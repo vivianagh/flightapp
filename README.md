@@ -9,7 +9,7 @@ This repository contains the **backend of the Flight Tracker project** along wit
 The **Angular frontend** visualizes in real time the air traffic detected over Tower Hamlets (London).  
 The original motivation came from noticing an increase in local air traffic and wanting to verify it with concrete data.
 
-The project exposes a **Spring Boot REST API** that serves as the backend for the Angular frontend (*flight-tracker-ui*).
+The project exposes a **Spring Boot REST API** that serves as the backend for the Angular frontend (*flight-tracker-ui*). https://github.com/vivianagh/flight-tracker-ui
 
 ## 🏗️ Architecture
 
